@@ -134,3 +134,40 @@ class DataProcessor:
                 plt.show()
             except Exception as e:
                 logging.error(f"Error plotting rolling statistics for {symbol}: {e}")
+    def detect_outliers(self, threshold=3):
+        """
+        Detect outliers in daily returns based on a standard deviation threshold.
+        """
+        outliers = {}
+        for symbol, df in self.data.items():
+            try:
+                logging.info(f"Detecting outliers for {symbol}")
+                mean_return = df['Daily Return'].mean()
+                std_dev_return = df['Daily Return'].std()
+                outliers[symbol] = df[np.abs(df['Daily Return'] - mean_return) > threshold * std_dev_return]
+            except Exception as e:
+                logging.error(f"Error detecting outliers for {symbol}: {e}")
+        return outliers
+    def plot_outliers(self):
+        """
+        Plot daily returns and highlight outliers detected.
+        """
+        for symbol, df in self.data.items():
+            try:
+                outliers = self.detect_outliers()
+                outlier_data = outliers.get(symbol)
+                if outlier_data is not None and not outlier_data.empty:
+                    logging.info(f"Plotting outliers for {symbol}")
+                    plt.figure(figsize=(14, 6))
+                    plt.plot(df['Date'], df['Daily Return'], label=f'{symbol} Daily Return')
+                    plt.scatter(outlier_data['Date'], outlier_data['Daily Return'], color='red', 
+                                label='Outliers', zorder=5)
+                    plt.title(f'{symbol} Daily Returns with Outliers')
+                    plt.xlabel('Date')
+                    plt.ylabel('Daily Return')
+                    plt.legend()
+                    plt.show()
+                else:
+                    logging.info(f"No outliers found for {symbol}")
+            except Exception as e:
+                logging.error(f"Error plotting outliers for {symbol}: {e}")
