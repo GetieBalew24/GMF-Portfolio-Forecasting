@@ -73,3 +73,32 @@ class DataProcessor:
                 plt.show()
             except Exception as e:
                 logging.error(f"Error plotting closing prices for {symbol}: {e}")
+    def calculate_daily_returns(self):
+        """
+        Calculate daily percentage changes (returns) and add them as a new column 
+        to each dataframe.
+        """
+        for symbol, df in self.data.items():
+            try:
+                logging.info(f"Calculating daily returns for {symbol}")
+                df['Daily Return'] = df['Close'].pct_change()
+            except Exception as e:
+                logging.error(f"Error calculating daily returns for {symbol}: {e}")
+        return self.data
+    
+    def plot_daily_returns(self):
+        """
+        Plot daily returns over time to observe volatility for each symbol.
+        """
+        for symbol, df in self.data.items():
+            try:
+                logging.info(f"Plotting daily returns for {symbol}")
+                plt.figure(figsize=(14, 6))
+                plt.plot(df['Date'], df['Daily Return'], label=f'{symbol} Daily Return')
+                plt.title(f'{symbol} Daily Percentage Change')
+                plt.xlabel('Date')
+                plt.ylabel('Daily Return')
+                plt.legend()
+                plt.show()
+            except Exception as e:
+                logging.error(f"Error plotting daily returns for {symbol}: {e}")
