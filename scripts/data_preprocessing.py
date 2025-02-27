@@ -102,3 +102,35 @@ class DataProcessor:
                 plt.show()
             except Exception as e:
                 logging.error(f"Error plotting daily returns for {symbol}: {e}")
+    def calculate_rolling_stats(self, window=20):
+        """
+        Compute rolling mean and standard deviation for the closing price of each symbol.
+        """
+        for symbol, df in self.data.items():
+            try:
+                logging.info(f"Calculating rolling statistics for {symbol}")
+                df['Rolling Mean'] = df['Close'].rolling(window=window).mean()
+                df['Rolling Std'] = df['Close'].rolling(window=window).std()
+            except Exception as e:
+                logging.error(f"Error calculating rolling statistics for {symbol}: {e}")
+        return self.data
+    
+    def plot_rolling_stats(self):
+        """
+        Plot the closing price along with its rolling mean and standard deviation.
+        """
+        for symbol, df in self.data.items():
+            try:
+                logging.info(f"Plotting rolling statistics for {symbol}")
+                plt.figure(figsize=(14, 6))
+                plt.plot(df['Date'], df['Close'], label=f'{symbol} Close')
+                plt.plot(df['Date'], df['Rolling Mean'], label='20-Day Rolling Mean')
+                plt.fill_between(df['Date'], df['Rolling Mean'] - df['Rolling Std'], 
+                                 df['Rolling Mean'] + df['Rolling Std'], color='lightgray')
+                plt.title(f'{symbol} Price and Rolling Statistics')
+                plt.xlabel('Date')
+                plt.ylabel('Price')
+                plt.legend()
+                plt.show()
+            except Exception as e:
+                logging.error(f"Error plotting rolling statistics for {symbol}: {e}")
