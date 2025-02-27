@@ -57,4 +57,19 @@ class DataProcessor:
             except Exception as e:
                 logging.error(f"Error calculating statistics for {symbol}: {e}")
         return stats
-    
+    def plot_closing_prices(self):
+        """
+        Plot the closing prices over time for each symbol.
+        """
+        for symbol, df in self.data.items():
+            try:
+                logging.info(f"Plotting closing prices for {symbol}")
+                plt.figure(figsize=(14, 6))
+                plt.plot(df['Date'], df['Close'], label=f'{symbol} Close Price')
+                plt.title(f'{symbol} Closing Price Over Time')
+                plt.xlabel('Date')
+                plt.ylabel('Closing Price')
+                plt.legend()
+                plt.show()
+            except Exception as e:
+                logging.error(f"Error plotting closing prices for {symbol}: {e}")
