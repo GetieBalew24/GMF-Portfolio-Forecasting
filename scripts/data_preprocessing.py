@@ -190,3 +190,18 @@ class DataProcessor:
             except Exception as e:
                 logging.error(f"Error decomposing time series for {symbol}: {e}")
         return decomposition_results
+    def calculate_risk_metrics(self, confidence_level=0.05):
+        """
+        Calculate Value at Risk (VaR) and Sharpe Ratio for each symbol's daily returns.
+        """
+        metrics = {}
+        for symbol, df in self.data.items():
+            try:
+                logging.info(f"Calculating risk metrics for {symbol}")
+                daily_returns = df['Daily Return'].dropna()
+                VaR = daily_returns.quantile(confidence_level)
+                Sharpe_Ratio = daily_returns.mean() / daily_returns.std() * np.sqrt(252)
+                metrics[symbol] = {'VaR': VaR, 'Sharpe Ratio': Sharpe_Ratio}
+            except Exception as e:
+                logging.error(f"Error calculating risk metrics for {symbol}: {e}")
+        return metrics
