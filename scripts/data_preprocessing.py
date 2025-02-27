@@ -171,3 +171,22 @@ class DataProcessor:
                     logging.info(f"No outliers found for {symbol}")
             except Exception as e:
                 logging.error(f"Error plotting outliers for {symbol}: {e}")
+    
+    def decompose_time_series(self):
+        """
+        Decompose the closing price time series into trend, seasonal, and residual components.
+        """
+        decomposition_results = {}
+        for symbol, df in self.data.items():
+            try:
+                logging.info(f"Decomposing time series for {symbol}")
+                df.set_index('Date', inplace=True)
+                decomposition = seasonal_decompose(df['Close'], model='multiplicative', period=252)
+                decomposition.plot()
+                plt.suptitle(f'{symbol} Seasonal Decomposition')
+                plt.show()
+                decomposition_results[symbol] = decomposition
+                df.reset_index(inplace=True)  # Reset index for further operations
+            except Exception as e:
+                logging.error(f"Error decomposing time series for {symbol}: {e}")
+        return decomposition_results
