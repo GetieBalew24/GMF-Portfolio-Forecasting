@@ -65,6 +65,53 @@ Using the Yahoo Finance (YFinance) API, we collect historical price data for Tes
 
 ---
 
+## Time Series Forecasting Models
+### Task 2: Develop Time Series Forecasting Models
+We experiment with several time series forecasting models, each offering unique advantages for predicting Tesla's stock prices:
+- **ARIMA**: Suitable for non-seasonal univariate data.
+- **SARIMA**: ARIMA with seasonal components.
+- **LSTM**: A deep learning model that captures long-term dependencies in time series data.
+
+#### Model Training and Evaluation
+- Split data into training and testing sets to assess model performance.
+- Use evaluation metrics like Mean Absolute Error (MAE), Root Mean Squared Error (RMSE), and Mean Absolute Percentage Error (MAPE) to gauge accuracy.
+- Use optimization techniques (e.g., grid search or auto_arima) to identify optimal model parameters.
+
+---
+
+## Market Trend Forecasting
+### Task 3: Forecast Future Market Trends
+Using the trained model, we forecast Tesla’s stock prices for the next 6-12 months:
+- **Forecast Visualization**: Plot historical and forecasted prices with confidence intervals.
+- **Trend Analysis**: Identify upward/downward trends and any anomalies.
+- **Volatility Analysis**: Evaluate forecasted volatility and highlight periods with potential risks.
+- **Risk and Opportunity Analysis**: Identify investment opportunities and risks based on forecasted price movements.
+
+---
+
+## Portfolio Optimization
+### Task 4: Optimize Portfolio Based on Forecast
+We optimize a simple portfolio of three assets:
+1. **Tesla Stock (TSLA)** - Higher risk and growth potential.
+2. **Vanguard Total Bond Market ETF (BND)** - Provides stability and low risk.
+3. **S&P 500 ETF (SPY)** - Diversified, moderate-risk market exposure.
+
+#### Portfolio Analysis
+- Calculate annual returns and daily compound returns for each asset.
+- Compute a covariance matrix to understand asset return correlations.
+- Define portfolio weights to compute weighted average return and risk.
+
+#### Optimization
+- Use the Sharpe Ratio to optimize asset allocation for risk-adjusted returns.
+- Adjust portfolio allocations to balance between risk and reward.
+- Simulate portfolio performance based on forecasted returns, documenting expected returns, volatility, and the Sharpe Ratio.
+
+#### Risk Management Metrics
+- **Value at Risk (VaR)**: Estimate potential losses in Tesla stock at a given confidence level.
+- **Sharpe Ratio**: Assess risk-adjusted return, where a higher ratio is preferred.
+
+---
+
 ## Conclusion
 This project demonstrates a comprehensive approach to data-driven investment strategy, covering data collection, cleaning and forecasting.
 
@@ -85,3 +132,8 @@ Install dependencies using:
 ```bash
 pip install -r requirements.txt
 ```
+## Author
+
+**Getie Balew**
+- [LinkedIn](https://www.linkedin.com/in/getie-balew-17a297110/)
+- [GitHub](https://github.com/GetieBalew24/)
