@@ -62,3 +62,65 @@ class PortfolioOptimization:
         portfolio_return = np.dot(weights, [tsla_annualized_return, bnd_annualized_return, spy_annualized_return])
         portfolio_volatility = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights)))
         return -portfolio_return / portfolio_volatility  # We negate the Sharpe Ratio to minimize
+    def calculate_portfolio_performance(self, weights):
+        """
+        Calculates the expected return, volatility (risk), and Sharpe ratio of the portfolio.
+        
+        :param weights: The weights for each asset in the portfolio.
+        :return: A tuple containing the portfolio's expected return, risk, and Sharpe ratio.
+        """
+        portfolio_return = np.dot(weights, [self.tsla_annualized_return, self.bnd_annualized_return, self.spy_annualized_return])
+        portfolio_volatility = np.sqrt(np.dot(weights.T, np.dot(self.cov_matrix, weights)))
+        sharpe_ratio = portfolio_return / portfolio_volatility
+        return portfolio_return, portfolio_volatility, sharpe_ratio
+    def plot_results(self, optimal_weights):
+        """
+        Plot results for portfolio optimization including:
+        - Efficient Frontier
+        - Portfolio Weights
+        - Correlation Heatmap
+        """
+        # Efficient Frontier
+        results = self.efficient_frontier()
+        
+        # Plot Efficient Frontier
+        plt.figure(figsize=(10, 6))
+        plt.scatter(results[1,:], results[0,:], c=results[2,:], cmap='viridis', marker='o')
+        plt.colorbar(label='Sharpe Ratio')
+        plt.title('Efficient Frontier')
+        plt.xlabel('Volatility')
+        plt.ylabel('Return')
+        plt.scatter(self.calculate_portfolio_performance(optimal_weights)[1], 
+                    self.calculate_portfolio_performance(optimal_weights)[0], 
+                    color='red', marker='*', s=200, label='Optimized Portfolio')
+        plt.legend()
+        plt.tight_layout()
+        plt.show()
+
+        # Portfolio Weights
+        plt.figure(figsize=(8, 5))
+        plt.bar(['TSLA', 'BND', 'SPY'], optimal_weights, color='lightblue')
+        plt.title('Optimized Portfolio Weights')
+        plt.ylabel('Weight')
+        plt.show()
+
+        # Correlation Heatmap
+        correlation_matrix = np.corrcoef([self.tsla_returns, self.bnd_returns, self.spy_returns])
+        sns.heatmap(correlation_matrix, annot=True, xticklabels=['TSLA', 'BND', 'SPY'], yticklabels=['TSLA', 'BND', 'SPY'], cmap='coolwarm', vmin=-1, vmax=1)
+        plt.title('Correlation Matrix of Asset Returns')
+        plt.show()
+    def efficient_frontier(self):
+        """
+        Generates the Efficient Frontier by plotting portfolio performance for different weight combinations.
+        
+        :return: Arrays of returns, volatilities, and Sharpe ratios for portfolios.
+        """
+        results = np.zeros((3, 1000))
+        for i in range(1000):
+            weights = np.random.random(3)
+            weights /= np.sum(weights)
+            portfolio_return, portfolio_volatility, sharpe_ratio = self.calculate_portfolio_performance(weights)
+            results[0,i] = portfolio_return
+            results[1,i] = portfolio_volatility
+            results[2,i] = sharpe_ratio
+        return results
